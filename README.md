@@ -2,6 +2,8 @@
 
 > Returns a function that combines two objects using given per-property functions
 
+Small, dependency-free utility for combining two objects.
+
 [![NPM][npm-icon] ][npm-url]
 
 [![Build status][ci-image] ][ci-url]
@@ -17,6 +19,40 @@ npm install --save add-objects
 ```
 
 ## Use
+
+If you know how to use [R.evolve](http://ramdajs.com/docs/#evolve) you can use this function.
+
+Give an object, where each property is an "adder" or "combinator" function. For example, if
+we want to concatenate "name" properties, but add "age" properties in the objects we
+could do the following:
+
+```js
+const addObjects = require('add-objects')
+const R = require('ramda')
+const adder = addObjects({
+  name: R.concat,
+  age: R.add
+})
+// combine two objects
+const a = {
+  name: 'a',
+  age: 1
+}
+const b = {
+  name: 'b',
+  age: 2
+}
+adder(a, b)
+// {name: "ab", age: 3}
+```
+
+This is very useful when reducing a list of objects for example
+
+```js
+// same code as above
+const combined = [a, a, b, b].reduce(adder, {name: '', age: 0})
+// {name: "aabb", age: 6}
+```
 
 ### Small print
 
